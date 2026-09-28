@@ -12,7 +12,6 @@
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
         body { font-family: 'Tajawal', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
         
-        /* تأثيرات النيون والزجاج الفاخر */
         .neon-glow {
             box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
         }
@@ -32,10 +31,8 @@
 </head>
 <body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
 
-    <!-- خلفية جمالية متوهجة -->
     <div class="fixed inset-0 hero-gradient pointer-events-none z-0"></div>
 
-    <!-- الهيدر الفاخر -->
     <header class="glass-panel sticky top-0 z-50 border-b border-slate-800/80 py-4 px-6 md:px-12 flex justify-between items-center shadow-lg">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30 text-white font-black text-xl">⚡</div>
@@ -50,9 +47,7 @@
         </div>
     </header>
 
-    <!-- المحتوى الرئيسي -->
     <main class="max-w-7xl mx-auto px-4 py-16 flex-grow w-full relative z-10">
-        <!-- قسم العنوان البارز -->
         <div class="text-center mb-16 max-w-3xl mx-auto">
             <div class="inline-block mb-4 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold tracking-wide uppercase">
                 منصة الاشتراكات الرقمية الأولى
@@ -61,9 +56,7 @@
             <p class="text-slate-400 text-lg leading-relaxed">اختر اشتراكك المفضل، وكن على موعد مع تجربة رقمية استثنائية وبأسعار لا تقبل المنافسة.</p>
         </div>
 
-        <!-- شبكة المنتجات (تعبئة ديناميكية) -->
         <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- حالة التحميل الافتراضية -->
             <div class="col-span-full flex flex-col items-center justify-center py-20">
                 <div class="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4"></div>
                 <p class="text-slate-400 font-medium">جاري إطلاق جلب المنتجات من القاعدة...</p>
@@ -71,7 +64,6 @@
         </div>
     </main>
 
-    <!-- الفوتر -->
     <footer class="glass-panel border-t border-slate-800/80 py-8 text-center text-slate-500 text-sm relative z-10">
         <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
             <p>جميع الحقوق محفوظة &copy; 2026 <span class="text-slate-300 font-bold">THUNDER COLT</span></p>
@@ -79,7 +71,6 @@
         </div>
     </footer>
 
-    <!-- سكريبت جلب المنتجات وعرضها -->
     <script>
         const SUPABASE_URL = 'https://ucexqqdowabodjckufe.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_HowQ_BII_xJbVKFiwe08bw_13kSVGuj';
@@ -111,11 +102,12 @@
                     const card = document.createElement('div');
                     card.className = "glass-panel rounded-3xl overflow-hidden flex flex-col justify-between neon-glow transition-all duration-500 group";
                     
-                    // روابط افتراضية ذكية في حال كانت الصورة غير متوفرة
-                    const productImage = product.image_url && product.image_url.startsWith('http') 
+                    // استخدام صورة افتراضية فخمة إذا لم تكن الصورة صالحة
+                    const productImage = product.image_url && product.image_url.startsWith('http') && !product.image_url.includes('wikimedia.org/wiki')
                         ? product.image_url 
                         : 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop';
                     
+                    // التقاط الوصف بغض النظر عن طريقة كتابة اسم العمود في قاعدة البيانات
                     const productDesc = product.description || product.descreption || 'اشتراك رقمي رسمي مضمون وبجودة عالية مع دعم فني متواصل.';
 
                     card.innerHTML = `
@@ -149,11 +141,10 @@
 
             } catch (err) {
                 console.error('خطأ في جلب البيانات:', err);
-                // عرض بيانات احتياطية جمالية في حال واجه الاتصال أي تحدد شبكي مؤقت
                 container.innerHTML = `
                     <div class="col-span-full text-center py-12 glass-panel rounded-3xl border border-red-500/20">
                         <p class="text-red-400 font-bold mb-2">تعذر جلب المنتجات مباشرة من قاعدة البيانات حالياً</p>
-                        <p class="text-slate-500 text-sm">تأكد من إعدادات الاتصال أو سياسات الأمان في Supabase (RLS Policies).</p>
+                        <p class="text-slate-500 text-sm">خطأ تقني: ${err.message}</p>
                     </div>
                 `;
             }
