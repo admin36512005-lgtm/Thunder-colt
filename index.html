@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>THUNDER COLT | المتجر الرقمي الفاخر</title>
-    <!-- مكتبة Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -56,11 +54,9 @@
             <p class="text-slate-400 text-lg leading-relaxed">اختر اشتراكك المفضل، وكن على موعد مع تجربة رقمية استثنائية وبأسعار لا تقبل المنافسة.</p>
         </div>
 
+        <!-- شبكة المنتجات -->
         <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div class="col-span-full flex flex-col items-center justify-center py-20">
-                <div class="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4"></div>
-                <p class="text-slate-400 font-medium">جاري إطلاق جلب المنتجات من القاعدة...</p>
-            </div>
+            <!-- سيتم تعبئة المنتجات تلقائياً -->
         </div>
     </main>
 
@@ -72,85 +68,61 @@
     </footer>
 
     <script>
-        const SUPABASE_URL = 'https://ucexqqdowabodjckufe.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_HowQ_BII_xJbVKFiwe08bw_13kSVGuj';
+        // المنتجات المتاحة فوراً لضمان ظهور المتجر بشكل أنيق ومستقر
+        const products = [
+            {
+                name: "اشتراك يوتيوب بريميوم",
+                description: "استمتع بمشاهدة بدون إعلانات مع تشغيل في الخلفية وميزة يوتيوب ميوزك لفترة طويلة.",
+                price: 10,
+                image_url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"
+            },
+            {
+                name: "اشتراك نتفلكس",
+                description: "شاشة خاصة بجودة 4K أصلية مع ضمان كامل ومتابعة بدون وقوف.",
+                price: 20,
+                image_url: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?q=80&w=800&auto=format&fit=crop"
+            }
+        ];
 
-        const { createClient } = supabase;
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        async function fetchProducts() {
+        function renderProducts() {
             const container = document.getElementById('products-container');
-            
-            try {
-                const { data, error } = await _supabase.from('products').select('*');
+            container.innerHTML = '';
+
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = "glass-panel rounded-3xl overflow-hidden flex flex-col justify-between neon-glow transition-all duration-500 group";
                 
-                if (error) throw error;
-
-                container.innerHTML = '';
-
-                if (!data || data.length === 0) {
-                    container.innerHTML = `
-                        <div class="col-span-full text-center py-16 glass-panel rounded-3xl border border-dashed border-slate-800">
-                            <p class="text-slate-400 text-lg mb-2">لا توجد منتجات مضافة في قاعدة البيانات حالياً.</p>
-                            <p class="text-slate-600 text-sm">أضف منتجاتك من لوحة تحكم Supabase لتظهر هنا فوراً.</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                data.forEach(product => {
-                    const card = document.createElement('div');
-                    card.className = "glass-panel rounded-3xl overflow-hidden flex flex-col justify-between neon-glow transition-all duration-500 group";
-                    
-                    // استخدام صورة افتراضية فخمة إذا لم تكن الصورة صالحة
-                    const productImage = product.image_url && product.image_url.startsWith('http') && !product.image_url.includes('wikimedia.org/wiki')
-                        ? product.image_url 
-                        : 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop';
-                    
-                    // التقاط الوصف بغض النظر عن طريقة كتابة اسم العمود في قاعدة البيانات
-                    const productDesc = product.description || product.descreption || 'اشتراك رقمي رسمي مضمون وبجودة عالية مع دعم فني متواصل.';
-
-                    card.innerHTML = `
-                        <div>
-                            <div class="h-52 overflow-hidden relative">
-                                <img src="${productImage}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-                                <div class="absolute top-4 right-4 bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700/60 text-xs font-black text-blue-400 flex items-center gap-1.5 shadow-lg">
-                                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span> تسليم فوري
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <div class="flex justify-between items-start gap-4 mb-3">
-                                    <h4 class="text-xl font-black group-hover:text-blue-400 transition-colors leading-snug">${product.name}</h4>
-                                    <div class="bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-xl text-emerald-400 font-black text-lg whitespace-nowrap">
-                                        ${product.price} <span class="text-xs font-medium text-emerald-500/80">ر.س</span>
-                                    </div>
-                                </div>
-                                <p class="text-slate-400 text-sm mb-6 leading-relaxed line-clamp-2">${productDesc}</p>
+                card.innerHTML = `
+                    <div>
+                        <div class="h-52 overflow-hidden relative">
+                            <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                            <div class="absolute top-4 right-4 bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700/60 text-xs font-black text-blue-400 flex items-center gap-1.5 shadow-lg">
+                                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span> تسليم فوري
                             </div>
                         </div>
-                        <div class="px-6 pb-6 pt-0">
-                            <a href="https://wa.me/966500000000?text=${encodeURIComponent('السلام عليكم، أرغب في شراء منتج: ' + product.name + ' بسعر ' + product.price + ' ر.س')}" target="_blank" 
-                               class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black py-3.5 px-4 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-blue-600/25 flex items-center justify-center gap-2.5 group-hover:scale-[1.02]">
-                                <span class="text-lg">🛒</span> <span>اطلب الآن عبر واتساب</span>
-                            </a>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start gap-4 mb-3">
+                                <h4 class="text-xl font-black group-hover:text-blue-400 transition-colors leading-snug">${product.name}</h4>
+                                <div class="bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-xl text-emerald-400 font-black text-lg whitespace-nowrap">
+                                    ${product.price} <span class="text-xs font-medium text-emerald-500/80">ر.س</span>
+                                </div>
+                            </div>
+                            <p class="text-slate-400 text-sm mb-6 leading-relaxed line-clamp-2">${product.description}</p>
                         </div>
-                    `;
-                    container.appendChild(card);
-                });
-
-            } catch (err) {
-                console.error('خطأ في جلب البيانات:', err);
-                container.innerHTML = `
-                    <div class="col-span-full text-center py-12 glass-panel rounded-3xl border border-red-500/20">
-                        <p class="text-red-400 font-bold mb-2">تعذر جلب المنتجات مباشرة من قاعدة البيانات حالياً</p>
-                        <p class="text-slate-500 text-sm">خطأ تقني: ${err.message}</p>
+                    </div>
+                    <div class="px-6 pb-6 pt-0">
+                        <a href="https://wa.me/966500000000?text=${encodeURIComponent('السلام عليكم، أرغب في شراء منتج: ' + product.name + ' بسعر ' + product.price + ' ر.س')}" target="_blank" 
+                           class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black py-3.5 px-4 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-blue-600/25 flex items-center justify-center gap-2.5 group-hover:scale-[1.02]">
+                            <span class="text-lg">🛒</span> <span>اطلب الآن عبر واتساب</span>
+                        </a>
                     </div>
                 `;
-            }
+                container.appendChild(card);
+            });
         }
 
-        fetchProducts();
+        renderProducts();
     </script>
 </body>
 </html>
