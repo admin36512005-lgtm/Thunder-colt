@@ -155,13 +155,12 @@ input:focus,button:focus-visible,.chip:focus-visible,a:focus-visible{outline:2px
 <script>
 /* ============ الإعدادات ============ */
 const CONFIG = {
-  SUPABASE_URL: "ضع_رابط_سوبابيس_هنا",        // مثال: https://xxxx.supabase.co
-  SUPABASE_ANON_KEY: "ضع_مفتاح_anon_هنا",   // مفتاح anon الخاص بمشروعك
+  SUPABASE_URL: "https://ucexqqdowabodjckufe.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_HowQ_BII_xJbVKFIweO8bw_13kSVGuj",
   TABLE: "products",       
-  WHATSAPP: "966505534116",// تم ضبط رقم الواتساب المباشر
+  WHATSAPP: "966505534116",
   CURRENCY: "ر.س"
 };
-
 const $ = s => document.querySelector(s);
 const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const safeColor = c => /^#[0-9a-f]{3,8}$/i.test(c || "") ? c : "#1f6bff";
