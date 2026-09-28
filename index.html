@@ -3,42 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THUNDER COLT | المتجر الرقمي</title>
+    <title>THUNDER COLT | المتجر الرقمي الفاخر</title>
+    <!-- مكتبة Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #030712; color: #f3f4f6; }
-        .glass-card { background: rgba(17, 24, 39, 0.7); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        body { font-family: 'Tajawal', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
+        
+        /* تأثيرات النيون والزجاج الفاخر */
+        .neon-glow {
+            box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
+        }
+        .neon-glow:hover {
+            box-shadow: 0 0 35px rgba(59, 130, 246, 0.35);
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at center, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
+        }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between">
-    <!-- الهيدر -->
-    <header class="glass-card sticky top-0 z-50 border-b border-slate-800 py-4 px-6 md:px-12 flex justify-between items-center">
-        <h1 class="text-2xl font-black tracking-wider bg-gradient-to-r from-blue-400 to-indigo-500 bg-clip-text text-transparent">THUNDER COLT</h1>
-        <span class="text-xs bg-blue-500/10 text-blue-400 px-3 py-1.5 rounded-full border border-blue-500/20 font-bold">متجر رقمي معتمد ⚡</span>
+<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+
+    <!-- خلفية جمالية متوهجة -->
+    <div class="fixed inset-0 hero-gradient pointer-events-none z-0"></div>
+
+    <!-- الهيدر الفاخر -->
+    <header class="glass-panel sticky top-0 z-50 border-b border-slate-800/80 py-4 px-6 md:px-12 flex justify-between items-center shadow-lg">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30 text-white font-black text-xl">⚡</div>
+            <h1 class="text-2xl font-black tracking-wider bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">THUNDER COLT</h1>
+        </div>
+        <div class="flex items-center gap-2">
+            <span class="relative flex h-3 w-3">
+              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+              <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+            </span>
+            <span class="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1.5 rounded-full border border-emerald-500/20 font-bold hidden sm:inline-block">متجر نشط ويدعم التسليم الفوري</span>
+        </div>
     </header>
 
     <!-- المحتوى الرئيسي -->
-    <main class="max-w-7xl mx-auto px-4 py-12 flex-grow w-full">
-        <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-5xl font-black mb-4">الاشتراكات الرقمية المميزة</h2>
-            <p class="text-slate-400 text-lg">اختر منتجك المفضلة واحصل عليه بتسليم فوري وآمن</p>
+    <main class="max-w-7xl mx-auto px-4 py-16 flex-grow w-full relative z-10">
+        <!-- قسم العنوان البارز -->
+        <div class="text-center mb-16 max-w-3xl mx-auto">
+            <div class="inline-block mb-4 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold tracking-wide uppercase">
+                منصة الاشتراكات الرقمية الأولى
+            </div>
+            <h2 class="text-4xl md:text-6xl font-black mb-6 tracking-tight leading-tight">قوة السرعة والأمان في <span class="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">حساباتك</span></h2>
+            <p class="text-slate-400 text-lg leading-relaxed">اختر اشتراكك المفضل، وكن على موعد مع تجربة رقمية استثنائية وبأسعار لا تقبل المنافسة.</p>
         </div>
 
-        <!-- شبكة المنتجات -->
+        <!-- شبكة المنتجات (تعبئة ديناميكية) -->
         <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- سيتم تعبئة المنتجات هنا تلقائياً من Supabase -->
-            <div class="text-center col-span-full text-slate-500 py-10">جاري تحميل المنتجات...</div>
+            <!-- حالة التحميل الافتراضية -->
+            <div class="col-span-full flex flex-col items-center justify-center py-20">
+                <div class="w-12 h-12 border-4 border-blue-500/20 border-t-blue-500 rounded-full animate-spin mb-4"></div>
+                <p class="text-slate-400 font-medium">جاري إطلاق جلب المنتجات من القاعدة...</p>
+            </div>
         </div>
     </main>
 
     <!-- الفوتر -->
-    <footer class="border-t border-slate-800 py-6 text-center text-slate-500 text-sm">
-        جميع الحقوق محفوظة &copy; 2026 THUNDER COLT
+    <footer class="glass-panel border-t border-slate-800/80 py-8 text-center text-slate-500 text-sm relative z-10">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p>جميع الحقوق محفوظة &copy; 2026 <span class="text-slate-300 font-bold">THUNDER COLT</span></p>
+            <p class="text-xs text-slate-600">مصمم خصيصاً لتجربة تسوق رقمية فائقة السرعة</p>
+        </div>
     </footer>
 
-    <!-- سكريبت الاتصال بقاعدة البيانات وعرض المنتجات -->
+    <!-- سكريبت جلب المنتجات وعرضها -->
     <script>
         const SUPABASE_URL = 'https://ucexqqdowabodjckufe.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_HowQ_BII_xJbVKFiwe08bw_13kSVGuj';
@@ -52,44 +93,54 @@
             try {
                 const { data, error } = await _supabase.from('products').select('*');
                 
-                if (error) {
-                    throw error;
-                }
+                if (error) throw error;
 
                 container.innerHTML = '';
 
                 if (!data || data.length === 0) {
-                    container.innerHTML = '<div class="text-center col-span-full text-slate-400 py-10">لا توجد منتجات مضافة حالياً في قاعدة البيانات.</div>';
+                    container.innerHTML = `
+                        <div class="col-span-full text-center py-16 glass-panel rounded-3xl border border-dashed border-slate-800">
+                            <p class="text-slate-400 text-lg mb-2">لا توجد منتجات مضافة في قاعدة البيانات حالياً.</p>
+                            <p class="text-slate-600 text-sm">أضف منتجاتك من لوحة تحكم Supabase لتظهر هنا فوراً.</p>
+                        </div>
+                    `;
                     return;
                 }
 
                 data.forEach(product => {
                     const card = document.createElement('div');
-                    card.className = "glass-card rounded-2xl overflow-hidden flex flex-col justify-between transition-all duration-300 hover:border-blue-500/50 hover:shadow-xl hover:shadow-blue-500/10 group";
+                    card.className = "glass-panel rounded-3xl overflow-hidden flex flex-col justify-between neon-glow transition-all duration-500 group";
                     
-                    const productImage = product.image_url ? product.image_url : 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop';
-                    const productDesc = product.description || product.descreption || 'اشتراك رقمي مضمون وخدمة سريعة.';
+                    // روابط افتراضية ذكية في حال كانت الصورة غير متوفرة
+                    const productImage = product.image_url && product.image_url.startsWith('http') 
+                        ? product.image_url 
+                        : 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop';
+                    
+                    const productDesc = product.description || product.descreption || 'اشتراك رقمي رسمي مضمون وبجودة عالية مع دعم فني متواصل.';
 
                     card.innerHTML = `
                         <div>
-                            <div class="h-48 overflow-hidden relative">
-                                <img src="${productImage}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
-                                <div class="absolute top-3 right-3 bg-slate-900/80 backdrop-blur-md px-3 py-1 rounded-lg border border-slate-700 text-xs font-bold text-blue-400">
-                                    متوفر فوري
+                            <div class="h-52 overflow-hidden relative">
+                                <img src="${productImage}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+                                <div class="absolute top-4 right-4 bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700/60 text-xs font-black text-blue-400 flex items-center gap-1.5 shadow-lg">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span> تسليم فوري
                                 </div>
                             </div>
                             <div class="p-6">
-                                <div class="flex justify-between items-center mb-3">
-                                    <h4 class="text-xl font-bold group-hover:text-blue-400 transition-colors">${product.name}</h4>
-                                    <span class="text-xl font-black text-emerald-400">${product.price} <span class="text-xs text-slate-400">ر.س</span></span>
+                                <div class="flex justify-between items-start gap-4 mb-3">
+                                    <h4 class="text-xl font-black group-hover:text-blue-400 transition-colors leading-snug">${product.name}</h4>
+                                    <div class="bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-xl text-emerald-400 font-black text-lg whitespace-nowrap">
+                                        ${product.price} <span class="text-xs font-medium text-emerald-500/80">ر.س</span>
+                                    </div>
                                 </div>
-                                <p class="text-slate-400 text-sm mb-6 leading-relaxed">${productDesc}</p>
+                                <p class="text-slate-400 text-sm mb-6 leading-relaxed line-clamp-2">${productDesc}</p>
                             </div>
                         </div>
                         <div class="px-6 pb-6 pt-0">
-                            <a href="https://wa.me/966500000000?text=${encodeURIComponent('أرغب في شراء منتج: ' + product.name + ' بسعر ' + product.price + ' ر.س')}" target="_blank" 
-                               class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold py-3 px-4 rounded-xl text-center transition-all shadow-lg shadow-blue-600/20 flex items-center justify-center gap-2">
-                                <span>🛒</span> اطلب الآن عبر واتساب
+                            <a href="https://wa.me/966500000000?text=${encodeURIComponent('السلام عليكم، أرغب في شراء منتج: ' + product.name + ' بسعر ' + product.price + ' ر.س')}" target="_blank" 
+                               class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black py-3.5 px-4 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-blue-600/25 flex items-center justify-center gap-2.5 group-hover:scale-[1.02]">
+                                <span class="text-lg">🛒</span> <span>اطلب الآن عبر واتساب</span>
                             </a>
                         </div>
                     `;
@@ -98,7 +149,13 @@
 
             } catch (err) {
                 console.error('خطأ في جلب البيانات:', err);
-                container.innerHTML = `<div class="text-center col-span-full text-red-400 py-10">حدث خطأ أثناء جلب المنتجات: ${err.message}</div>`;
+                // عرض بيانات احتياطية جمالية في حال واجه الاتصال أي تحدد شبكي مؤقت
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-12 glass-panel rounded-3xl border border-red-500/20">
+                        <p class="text-red-400 font-bold mb-2">تعذر جلب المنتجات مباشرة من قاعدة البيانات حالياً</p>
+                        <p class="text-slate-500 text-sm">تأكد من إعدادات الاتصال أو سياسات الأمان في Supabase (RLS Policies).</p>
+                    </div>
+                `;
             }
         }
 
