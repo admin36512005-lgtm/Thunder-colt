@@ -1,128 +1,312 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>THUNDER COLT | المتجر الرقمي الفاخر</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap');
-        body { font-family: 'Tajawal', sans-serif; background-color: #020617; color: #f8fafc; overflow-x: hidden; }
-        
-        .neon-glow {
-            box-shadow: 0 0 25px rgba(59, 130, 246, 0.15);
-        }
-        .neon-glow:hover {
-            box-shadow: 0 0 35px rgba(59, 130, 246, 0.35);
-            border-color: rgba(59, 130, 246, 0.5);
-        }
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.07);
-        }
-        .hero-gradient {
-            background: radial-gradient(circle at center, rgba(37, 99, 235, 0.15) 0%, transparent 70%);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>THUNDER COLT | اشتراكات رقمية بسرعة الصاعقة</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04060d;--blue:#1f6bff;--cyan:#00e5ff;--ink:#e8f0ff;--mut:#8ea2c8}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Tajawal',system-ui,sans-serif;overflow-x:hidden}
+.logo{font-family:'Orbitron',sans-serif;letter-spacing:.12em}
+#bg{position:fixed;inset:0;z-index:-3;background:
+ radial-gradient(60% 50% at 80% 0%,rgba(31,107,255,.28),transparent 70%),
+ radial-gradient(50% 40% at 10% 90%,rgba(0,229,255,.14),transparent 70%),var(--bg)}
+#grid{position:fixed;inset:0;z-index:-2;opacity:.35;background-image:linear-gradient(rgba(31,107,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(31,107,255,.14) 1px,transparent 1px);background-size:56px 56px;-webkit-mask-image:radial-gradient(70% 60% at 50% 30%,#000,transparent);mask-image:radial-gradient(70% 60% at 50% 30%,#000,transparent)}
+#spot{position:fixed;left:0;top:0;width:520px;height:520px;margin:-260px 0 0 -260px;z-index:-1;pointer-events:none;border-radius:50%;background:radial-gradient(circle,rgba(0,229,255,.13),transparent 65%);transition:opacity .4s;opacity:0;will-change:transform}
+#progress{position:fixed;top:0;right:0;height:3px;width:0;z-index:60;background:linear-gradient(90deg,var(--cyan),var(--blue));box-shadow:0 0 14px var(--cyan)}
+.glass{background:rgba(14,22,44,.55);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(90,140,255,.22)}
+.neon-text{background:linear-gradient(100deg,#fff 10%,var(--cyan) 45%,var(--blue) 90%);-webkit-background-clip:text;background-clip:text;color:transparent}
+/* Hero */
+.stage{position:relative;width:min(340px,80vw);aspect-ratio:1;display:grid;place-items:center}
+.ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(0,229,255,.35);animation:spin 14s linear infinite}
+.ring.r2{inset:12%;border-style:dashed;border-color:rgba(31,107,255,.5);animation-duration:22s;animation-direction:reverse}
+.ring.r3{inset:26%;border-color:rgba(0,229,255,.2);animation-duration:9s}
+.ring::after{content:"";position:absolute;top:-4px;left:50%;width:8px;height:8px;border-radius:50%;background:var(--cyan);box-shadow:0 0 16px 4px var(--cyan)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.layer{transition:transform .2s ease-out;will-change:transform}
+.bolt{width:58%;filter:drop-shadow(0 0 18px var(--cyan)) drop-shadow(0 0 50px var(--blue));animation:flick 5s infinite}
+.bolt path{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 1.6s .2s ease-out forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes flick{0%,86%,100%{opacity:1}88%{opacity:.35}90%{opacity:1}93%{opacity:.5}95%{opacity:1}}
+.title-in>*{opacity:0;transform:translateY(22px);animation:up .8s cubic-bezier(.2,.8,.2,1) forwards}
+.title-in>*:nth-child(2){animation-delay:.12s}.title-in>*:nth-child(3){animation-delay:.24s}.title-in>*:nth-child(4){animation-delay:.36s}
+@keyframes up{to{opacity:1;transform:none}}
+/* Cards */
+.card-wrap{perspective:1000px;opacity:0;transform:translateY(30px) scale(.97);animation:cardIn .7s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*70ms)}
+@keyframes cardIn{to{opacity:1;transform:none}}
+.card{position:relative;height:100%;border-radius:24px;padding:22px;transform-style:preserve-3d;transition:transform .2s ease-out,box-shadow .35s;overflow:hidden;will-change:transform}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),rgba(0,229,255,.24),transparent 60%)}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),var(--cyan),transparent 65%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.card:hover::before,.card:hover::after{opacity:1}
+.card:hover{box-shadow:0 26px 70px -22px rgba(31,107,255,.7)}
+.glare{position:absolute;inset:-50%;pointer-events:none;background:linear-gradient(115deg,transparent 42%,rgba(255,255,255,.09) 50%,transparent 58%);transform:translateX(var(--gx,-60%));transition:transform .25s ease-out}
+.lift{transform:translateZ(40px)}.lift2{transform:translateZ(22px)}
+.pic{width:68px;height:68px;border-radius:20px;display:grid;place-items:center;font-size:30px;font-weight:800;color:#fff;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover}
+.btn{position:relative;overflow:hidden;border-radius:14px;font-weight:800;padding:12px 20px;color:#fff;background:linear-gradient(120deg,var(--blue),#0a3fd1);box-shadow:0 0 0 1px rgba(0,229,255,.4),0 8px 28px -8px var(--blue);transition:transform .15s,box-shadow .25s;cursor:pointer;border:0;display:inline-block;text-align:center}
+.btn:hover{box-shadow:0 0 0 1px var(--cyan),0 0 34px rgba(0,229,255,.6)}
+.btn:active{transform:scale(.95)!important}
+.btn::before{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);transform:skewX(-20deg);transition:left .6s}
+.btn:hover::before{left:130%}
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.5);transform:scale(0);animation:rp .6s ease-out forwards;pointer-events:none}
+@keyframes rp{to{transform:scale(4);opacity:0}}
+.chip{padding:8px 16px;border-radius:999px;font-weight:700;font-size:14px;color:var(--mut);cursor:pointer;transition:.25s}
+.chip:hover{color:#fff;transform:translateY(-2px)}
+.chip.on{color:#fff;background:rgba(31,107,255,.4);box-shadow:0 0 18px rgba(31,107,255,.6) inset,0 0 0 1px var(--cyan)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.in{opacity:1;transform:none}
+input:focus,button:focus-visible,.chip:focus-visible,a:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+/* Glass skeleton */
+.sk{position:relative;height:290px;border-radius:24px;padding:22px;overflow:hidden}
+.sk::after{content:"";position:absolute;top:0;bottom:0;width:60%;right:-70%;background:linear-gradient(100deg,transparent,rgba(0,229,255,.14),rgba(255,255,255,.08),transparent);transform:skewX(-18deg);animation:sweep 1.6s ease-in-out infinite;animation-delay:calc(var(--i)*.15s)}
+@keyframes sweep{to{right:130%}}
+.sk::before{content:"";position:absolute;left:0;right:0;height:2px;top:0;background:linear-gradient(90deg,transparent,var(--cyan),transparent);box-shadow:0 0 18px var(--cyan);animation:scan 2.2s ease-in-out infinite alternate;animation-delay:calc(var(--i)*.2s)}
+@keyframes scan{to{top:100%}}
+.bar{border-radius:10px;background:rgba(120,160,255,.13);animation:pulse 1.4s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.45}}
+/* State panel */
+.state{max-width:520px;margin:20px auto;border-radius:28px;padding:40px 28px;text-align:center;position:relative;overflow:hidden;animation:up .7s both}
+.state::before{content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1.5px;background:conic-gradient(from var(--a,0deg),transparent 60%,var(--cyan),transparent);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;animation:rot 5s linear infinite}
+@property --a{syntax:'<angle>';initial-value:0deg;inherits:false}
+@keyframes rot{to{--a:360deg}}
+.float{animation:fl 3.2s ease-in-out infinite}
+@keyframes fl{50%{transform:translateY(-10px)}}
+/* Modal */
+#modal{opacity:0;pointer-events:none;transition:opacity .25s}
+#modal.open{opacity:1;pointer-events:auto}
+#modal .panel{transform:translateY(34px) scale(.93) rotateX(8deg);transition:transform .4s cubic-bezier(.2,1.2,.3,1)}
+#modal.open .panel{transform:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.card-wrap,.title-in>*{opacity:1;transform:none}.bolt path{stroke-dashoffset:0}}
+</style>
 </head>
-<body class="min-h-screen flex flex-col justify-between selection:bg-blue-500 selection:text-white">
+<body>
+<div id="bg"></div><div id="grid"></div><div id="spot"></div><div id="progress"></div>
 
-    <div class="fixed inset-0 hero-gradient pointer-events-none z-0"></div>
+<header class="fixed top-0 inset-x-0 z-40">
+  <div class="glass mx-auto mt-3 max-w-6xl rounded-2xl px-4 py-3 flex items-center justify-between" style="width:calc(100% - 24px)">
+    <a href="#top" class="logo text-lg sm:text-xl font-black neon-text">THUNDER COLT</a>
+    <nav class="flex gap-6 text-sm text-[var(--mut)] font-bold">
+      <a href="#shop" class="hover:text-white transition">المنتجات</a>
+      <a href="#why" class="hover:text-white transition">لماذا نحن</a>
+    </nav>
+  </div>
+</header>
 
-    <header class="glass-panel sticky top-0 z-50 border-b border-slate-800/80 py-4 px-6 md:px-12 flex justify-between items-center shadow-lg">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-blue-500/30 text-white font-black text-xl">⚡</div>
-            <h1 class="text-2xl font-black tracking-wider bg-gradient-to-r from-blue-400 via-indigo-300 to-purple-400 bg-clip-text text-transparent">THUNDER COLT</h1>
-        </div>
-        <div class="flex items-center gap-2">
-            <span class="relative flex h-3 w-3">
-              <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-              <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
-            </span>
-            <span class="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1.5 rounded-full border border-emerald-500/20 font-bold hidden sm:inline-block">متجر نشط ويدعم التسليم الفوري</span>
-        </div>
-    </header>
+<main id="top">
+  <section class="max-w-6xl mx-auto px-5 pt-36 pb-16 grid lg:grid-cols-2 gap-10 items-center">
+    <div class="title-in">
+      <p class="glass inline-block rounded-full px-4 py-1.5 text-sm text-[var(--cyan)] font-bold mb-5">تفعيل فوري خلال دقائق</p>
+      <h1 class="text-4xl sm:text-6xl font-extrabold leading-[1.25]">اشتراكاتك الرقمية<br>بسرعة <span class="neon-text">الصاعقة</span></h1>
+      <p class="mt-5 text-lg text-[var(--mut)] max-w-md leading-8">في <b class="logo text-white text-base">THUNDER COLT</b> نسلّمك حسابك الأصلي مضمونًا وبسعر أذكى، بدون انتظار وبدون تعقيد.</p>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="#shop" class="btn mag">تصفّح الاشتراكات</a>
+        <a href="#why" class="glass rounded-[14px] px-5 py-3 font-bold hover:text-[var(--cyan)] hover:-translate-y-0.5 transition">كيف نعمل؟</a>
+      </div>
+    </div>
+    <div class="grid place-items-center">
+      <div class="stage" id="stage">
+        <div class="ring layer" data-d="6"></div><div class="ring r2 layer" data-d="12"></div><div class="ring r3 layer" data-d="18"></div>
+        <svg class="bolt layer" data-d="30" viewBox="0 0 200 300" fill="none" aria-hidden="true">
+          <path d="M120 8 30 170h62l-18 122 96-172h-64L120 8Z" stroke="#00e5ff" stroke-width="5" stroke-linejoin="round" fill="rgba(31,107,255,.25)"/>
+        </svg>
+      </div>
+    </div>
+  </section>
 
-    <main class="max-w-7xl mx-auto px-4 py-16 flex-grow w-full relative z-10">
-        <div class="text-center mb-16 max-w-3xl mx-auto">
-            <div class="inline-block mb-4 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-bold tracking-wide uppercase">
-                منصة الاشتراكات الرقمية الأولى
-            </div>
-            <h2 class="text-4xl md:text-6xl font-black mb-6 tracking-tight leading-tight">قوة السرعة والأمان في <span class="bg-gradient-to-r from-blue-400 to-indigo-400 bg-clip-text text-transparent">حساباتك</span></h2>
-            <p class="text-slate-400 text-lg leading-relaxed">اختر اشتراكك المفضل، وكن على موعد مع تجربة رقمية استثنائية وبأسعار لا تقبل المنافسة.</p>
-        </div>
+  <section id="shop" class="max-w-6xl mx-auto px-5 py-10 scroll-mt-24">
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 mb-8 reveal">
+      <h2 class="text-3xl font-extrabold">اختر اشتراكك</h2>
+      <div class="glass rounded-2xl flex items-center gap-2 px-4 py-2.5 md:w-80 focus-within:shadow-[0_0_24px_rgba(0,229,255,.35)] transition">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8ea2c8" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="search" type="search" placeholder="ابحث عن منصة..." class="bg-transparent w-full outline-none placeholder:text-[var(--mut)]" autocomplete="off">
+      </div>
+    </div>
+    <div id="chips" class="flex flex-wrap gap-2 mb-8" role="tablist"></div>
+    <div id="products" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6" aria-live="polite"></div>
+    <p id="nomatch" class="hidden text-center text-[var(--mut)] py-16">لا توجد نتائج مطابقة. جرّب كلمة أخرى أو اختر «الكل».</p>
+  </section>
 
-        <!-- شبكة المنتجات -->
-        <div id="products-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <!-- سيتم تعبئة المنتجات تلقائياً -->
-        </div>
-    </main>
+  <section id="why" class="max-w-6xl mx-auto px-5 py-16 grid sm:grid-cols-3 gap-5 scroll-mt-24">
+    <div class="glass rounded-2xl p-6 reveal hover:-translate-y-1 hover:shadow-[0_18px_50px_-20px_rgba(31,107,255,.7)] transition"><h3 class="font-extrabold text-xl mb-2">تسليم فوري</h3><p class="text-[var(--mut)] leading-7">بعد تأكيد الطلب تصلك بيانات التفعيل مباشرة على واتساب.</p></div>
+    <div class="glass rounded-2xl p-6 reveal hover:-translate-y-1 hover:shadow-[0_18px_50px_-20px_rgba(31,107,255,.7)] transition"><h3 class="font-extrabold text-xl mb-2">ضمان كامل المدة</h3><p class="text-[var(--mut)] leading-7">أي مشكلة خلال فترة الاشتراك نعوّضك أو نستبدل الحساب.</p></div>
+    <div class="glass rounded-2xl p-6 reveal hover:-translate-y-1 hover:shadow-[0_18px_50px_-20px_rgba(31,107,255,.7)] transition"><h3 class="font-extrabold text-xl mb-2">دعم حقيقي</h3><p class="text-[var(--mut)] leading-7">فريق يرد عليك بسرعة، لا رسائل آلية ولا انتظار.</p></div>
+  </section>
+</main>
 
-    <footer class="glass-panel border-t border-slate-800/80 py-8 text-center text-slate-500 text-sm relative z-10">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <p>جميع الحقوق محفوظة &copy; 2026 <span class="text-slate-300 font-bold">THUNDER COLT</span></p>
-            <p class="text-xs text-slate-600">مصمم خصيصاً لتجربة تسوق رقمية فائقة السرعة</p>
-        </div>
-    </footer>
+<footer class="text-center text-sm text-[var(--mut)] py-10"><span class="logo">THUNDER COLT</span> &copy; <span id="yr"></span></footer>
 
-    <script>
-        // المنتجات المتاحة فوراً لضمان ظهور المتجر بشكل أنيق ومستقر
-        const products = [
-            {
-                name: "اشتراك يوتيوب بريميوم",
-                description: "استمتع بمشاهدة بدون إعلانات مع تشغيل في الخلفية وميزة يوتيوب ميوزك لفترة طويلة.",
-                price: 10,
-                image_url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=800&auto=format&fit=crop"
-            },
-            {
-                name: "اشتراك نتفلكس",
-                description: "شاشة خاصة بجودة 4K أصلية مع ضمان كامل ومتابعة بدون وقوف.",
-                price: 20,
-                image_url: "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?q=80&w=800&auto=format&fit=crop"
-            }
-        ];
+<div id="modal" class="fixed inset-0 z-50 grid place-items-center p-4" style="perspective:1000px" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div id="overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
+  <div class="panel glass relative w-full max-w-md rounded-3xl p-7 shadow-[0_0_80px_-10px_rgba(31,107,255,.7)]">
+    <button id="mClose" aria-label="إغلاق" class="absolute top-4 left-4 w-9 h-9 rounded-full glass grid place-items-center hover:text-[var(--cyan)] hover:rotate-90 transition">✕</button>
+    <div class="flex items-center gap-4 mb-5"><div id="mPic" class="pic"></div><div><h3 id="mTitle" class="text-2xl font-extrabold"></h3><p id="mPlan" class="text-[var(--mut)]"></p></div></div>
+    <ul id="mFeat" class="space-y-2 mb-5"></ul>
+    <div class="flex items-center justify-between glass rounded-2xl px-4 py-3 mb-2"><span class="text-[var(--mut)]">رقم الطلب</span><b id="mOrder" class="logo text-[var(--cyan)] text-sm"></b></div>
+    <div class="flex items-center justify-between glass rounded-2xl px-4 py-3 mb-5"><span class="text-[var(--mut)]">السعر</span><b id="mPrice" class="text-xl"></b></div>
+    <button id="mGo" class="btn mag w-full text-lg">أكمل الطلب عبر واتساب</button>
+  </div>
+</div>
 
-        function renderProducts() {
-            const container = document.getElementById('products-container');
-            container.innerHTML = '';
+<script>
+/* ============ الإعدادات ============ */
+const CONFIG = {
+  SUPABASE_URL: "ضع_رابط_سوبابيس_هنا",        // مثال: https://xxxx.supabase.co
+  SUPABASE_ANON_KEY: "ضع_مفتاح_anon_هنا",   // مفتاح anon الخاص بمشروعك
+  TABLE: "products",       
+  WHATSAPP: "966505534116",// تم ضبط رقم الواتساب المباشر
+  CURRENCY: "ر.س"
+};
 
-            products.forEach(product => {
-                const card = document.createElement('div');
-                card.className = "glass-panel rounded-3xl overflow-hidden flex flex-col justify-between neon-glow transition-all duration-500 group";
-                
-                card.innerHTML = `
-                    <div>
-                        <div class="h-52 overflow-hidden relative">
-                            <img src="${product.image_url}" alt="${product.name}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
-                            <div class="absolute top-4 right-4 bg-slate-900/90 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700/60 text-xs font-black text-blue-400 flex items-center gap-1.5 shadow-lg">
-                                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span> تسليم فوري
-                            </div>
-                        </div>
-                        <div class="p-6">
-                            <div class="flex justify-between items-start gap-4 mb-3">
-                                <h4 class="text-xl font-black group-hover:text-blue-400 transition-colors leading-snug">${product.name}</h4>
-                                <div class="bg-emerald-500/10 border border-emerald-500/20 px-3 py-1 rounded-xl text-emerald-400 font-black text-lg whitespace-nowrap">
-                                    ${product.price} <span class="text-xs font-medium text-emerald-500/80">ر.س</span>
-                                </div>
-                            </div>
-                            <p class="text-slate-400 text-sm mb-6 leading-relaxed line-clamp-2">${product.description}</p>
-                        </div>
-                    </div>
-                    <div class="px-6 pb-6 pt-0">
-                        <a href="https://wa.me/966500000000?text=${encodeURIComponent('السلام عليكم، أرغب في شراء منتج: ' + product.name + ' بسعر ' + product.price + ' ر.س')}" target="_blank" 
-                           class="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-black py-3.5 px-4 rounded-2xl text-center transition-all duration-300 shadow-lg shadow-blue-600/25 flex items-center justify-center gap-2.5 group-hover:scale-[1.02]">
-                            <span class="text-lg">🛒</span> <span>اطلب الآن عبر واتساب</span>
-                        </a>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
+const $ = s => document.querySelector(s);
+const esc = v => String(v ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const safeColor = c => /^#[0-9a-f]{3,8}$/i.test(c || "") ? c : "#1f6bff";
+const fmt = n => `${n} ${CONFIG.CURRENCY}`;
+let PRODUCTS = [], activeCat = "الكل", query = "";
 
-        renderProducts();
-    </script>
+/* ============ حالات العرض ============ */
+function skeleton(){
+  $("#chips").innerHTML = "";
+  $("#products").innerHTML = Array.from({length:6},(_,i)=>`
+    <div class="sk glass" style="--i:${i}">
+      <div class="bar" style="width:68px;height:68px;border-radius:20px"></div>
+      <div class="bar" style="height:18px;width:60%;margin-top:22px"></div>
+      <div class="bar" style="height:12px;width:35%;margin-top:12px"></div>
+      <div class="bar" style="height:10px;width:80%;margin-top:26px"></div>
+      <div class="bar" style="height:10px;width:65%;margin-top:10px"></div>
+      <div class="flex justify-between items-center" style="margin-top:34px"><div class="bar" style="height:26px;width:90px"></div><div class="bar" style="height:44px;width:110px;border-radius:14px"></div></div>
+    </div>`).join("");
+}
+function state(kind){
+  const M = {
+    empty:{t:"لا توجد منتجات حالياً",d:"نجهّز الاشتراكات الجديدة الآن. عد بعد قليل، أو تواصل معنا على واتساب لتعرف ما هو متاح.",b:"تواصل عبر واتساب",act:"wa"},
+    error:{t:"تعذّر تحميل المنتجات",d:"لم نستطع الاتصال بالخادم. تحقق من اتصالك بالإنترنت ثم أعد المحاولة.",b:"إعادة المحاولة",act:"retry"},
+    config:{t:"الربط غير مُكتمل",d:"ضع رابط SUPABASE_URL ومفتاح SUPABASE_ANON_KEY الخاص بمشروعك في كائن CONFIG لتبدأ المنتجات بالظهور تلقائياً.",b:"",act:""}
+  }[kind];
+  $("#chips").innerHTML = "";
+  $("#products").innerHTML = `<div class="state glass sm:col-span-2 lg:col-span-3" style="grid-column:1/-1">
+    <svg class="float mx-auto mb-5" width="72" height="96" viewBox="0 0 200 300" fill="none" aria-hidden="true" style="filter:drop-shadow(0 0 16px #00e5ff)"><path d="M120 8 30 170h62l-18 122 96-172h-64L120 8Z" stroke="#00e5ff" stroke-width="7" stroke-linejoin="round" fill="rgba(31,107,255,.2)"/></svg>
+    <h3 class="text-2xl font-extrabold mb-2">${M.t}</h3><p class="text-[var(--mut)] leading-8 mb-6">${M.d}</p>
+    ${M.b?`<button class="btn mag" id="stateBtn">${M.b}</button>`:""}</div>`;
+  const b = $("#stateBtn");
+  if(b) b.onclick = M.act==="retry" ? loadProducts : () => window.open(`https://wa.me/${CONFIG.WHATSAPP}`,"_blank","noopener");
+}
+
+/* ============ جلب المنتجات عبر Supabase JS ============ */
+let sb = null;
+function normalize(p){
+  let f = p.features;
+  if(typeof f === "string"){ try{ f = JSON.parse(f) }catch{ f = f.split(",").map(s=>s.trim()).filter(Boolean) } }
+  return {id:p.id, name:p.name||"اشتراك", plan:p.plan||"", price:Number(p.price)||0, category:p.category||"أخرى",
+    color:safeColor(p.color), icon:p.icon||(p.name||"T").trim().charAt(0), image:p.image_url||"", features:Array.isArray(f)?f:[], badge:p.badge||""};
+}
+async function loadProducts(){
+  if(!CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_ANON_KEY || CONFIG.SUPABASE_URL.includes("ضع_رابط")) return state("config");
+  skeleton();
+  try{
+    if(!window.supabase) throw new Error("Supabase library failed to load");
+    sb = sb || window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+    const {data, error} = await sb.from(CONFIG.TABLE).select("*").order("id",{ascending:true});
+    if(error) throw error;
+    if(!data || !data.length) return state("empty");
+    PRODUCTS = data.map(normalize);
+    activeCat = "الكل"; query = ""; $("#search").value = "";
+    renderChips(); renderGrid();
+  }catch(err){ console.error("THUNDER COLT: load failed", err); state("error"); }
+}
+
+/* ============ العرض ============ */
+function picHTML(p){ return p.image ? `<img src="${esc(p.image)}" alt="${esc(p.name)}" loading="lazy">` : esc(p.icon); }
+function renderChips(){
+  const cats = ["الكل", ...new Set(PRODUCTS.map(p=>p.category))];
+  $("#chips").innerHTML = cats.map(c=>`<button class="chip glass ${c===activeCat?"on":""}" data-cat="${esc(c)}" role="tab" aria-selected="${c===activeCat}">${esc(c)}</button>`).join("");
+}
+function renderGrid(){
+  const q = query.trim().toLowerCase();
+  const list = PRODUCTS.filter(p => (activeCat==="الكل"||p.category===activeCat) && (!q || (p.name+" "+p.plan+" "+p.category).toLowerCase().includes(q)));
+  $("#nomatch").classList.toggle("hidden", list.length>0);
+  $("#products").innerHTML = list.map((p,i)=>`
+   <div class="card-wrap" style="--i:${i}"><article class="card glass">
+     <div class="glare"></div>
+     ${p.badge?`<span class="absolute top-4 left-4 text-xs font-extrabold px-3 py-1 rounded-full bg-[var(--cyan)] text-black lift">${esc(p.badge)}</span>`:""}
+     <div class="lift pic" style="background:linear-gradient(135deg,${p.color},${p.color}88);box-shadow:0 0 30px ${p.color}77">${picHTML(p)}</div>
+     <h3 class="lift2 mt-4 text-xl font-extrabold">${esc(p.name)}</h3>
+     <p class="lift2 text-[var(--mut)] text-sm">${esc(p.plan)}</p>
+     <ul class="lift2 mt-3 mb-5 text-sm text-[var(--mut)] space-y-1">${p.features.slice(0,3).map(f=>`<li><span class="text-[var(--cyan)]">✓</span> ${esc(f)}</li>`).join("")}</ul>
+     <div class="lift flex items-center justify-between"><b class="text-2xl">${esc(fmt(p.price))}</b><button class="btn mag order" data-id="${esc(p.id)}">اطلب الآن</button></div>
+   </article></div>`).join("");
+}
+
+/* ============ تفاعلات ============ */
+const fine = matchMedia("(pointer:fine)").matches;
+const products = $("#products");
+if(fine){
+  products.addEventListener("pointermove", e=>{
+    const card = e.target.closest(".card"); if(!card) return;
+    const r = card.getBoundingClientRect(), x = e.clientX-r.left, y = e.clientY-r.top;
+    card.style.setProperty("--mx", x+"px"); card.style.setProperty("--my", y+"px");
+    card.style.setProperty("--gx", ((x/r.width)*120-60)+"%");
+    card.style.transform = `rotateX(${((y/r.height)-.5)*-12}deg) rotateY(${((x/r.width)-.5)*12}deg) translateY(-6px)`;
+  });
+  products.addEventListener("pointerout", e=>{ const c=e.target.closest(".card"); if(c && !c.contains(e.relatedTarget)){ c.style.transform=""; c.style.setProperty("--gx","-60%"); } });
+  document.addEventListener("pointermove", e=>{
+    const b = e.target.closest?.(".mag");
+    if(b){ const r=b.getBoundingClientRect(); b.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.18}px,${(e.clientY-r.top-r.height/2)*.28}px)`; }
+  });
+  document.addEventListener("pointerout", e=>{ const b=e.target.closest?.(".mag"); if(b && !b.contains(e.relatedTarget)) b.style.transform=""; });
+  const spot = $("#spot"), layers = document.querySelectorAll(".layer");
+  addEventListener("pointermove", e=>{
+    spot.style.opacity = 1; spot.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+    const dx = e.clientX/innerWidth-.5, dy = e.clientY/innerHeight-.5;
+    layers.forEach(l=>{ const d=+l.dataset.d; l.style.transform=`translate(${dx*d}px,${dy*d}px)`; });
+  });
+}
+document.addEventListener("pointerdown", e=>{
+  const b = e.target.closest(".btn"); if(!b) return;
+  const r = b.getBoundingClientRect(), s = Math.max(r.width,r.height), sp = document.createElement("span");
+  sp.className = "ripple"; sp.style.cssText = `width:${s}px;height:${s}px;left:${e.clientX-r.left-s/2}px;top:${e.clientY-r.top-s/2}px`;
+  b.appendChild(sp); setTimeout(()=>sp.remove(), 650);
+});
+addEventListener("scroll", ()=>{ const h=document.documentElement; $("#progress").style.width = (scrollY/(h.scrollHeight-innerHeight||1)*100)+"%"; }, {passive:true});
+
+/* فلترة وبحث */
+$("#chips").addEventListener("click", e=>{ const c=e.target.closest(".chip"); if(!c) return; activeCat=c.dataset.cat; renderChips(); renderGrid(); });
+$("#search").addEventListener("input", e=>{ query=e.target.value; renderGrid(); });
+
+/* ============ النافذة + واتساب ============ */
+let current = null, orderNo = "";
+const makeOrder = () => "TC-" + Date.now().toString(36).toUpperCase().slice(-5) + Math.floor(100+Math.random()*900);
+function openModal(p){
+  current = p; orderNo = makeOrder();
+  $("#mTitle").textContent = p.name; $("#mPlan").textContent = p.plan;
+  const pic = $("#mPic"); pic.style.cssText = `background:linear-gradient(135deg,${p.color},${p.color}88);box-shadow:0 0 30px ${p.color}77`; pic.innerHTML = picHTML(p);
+  $("#mFeat").innerHTML = p.features.map(f=>`<li><span class="text-[var(--cyan)]">✓</span> ${esc(f)}</li>`).join("");
+  $("#mOrder").textContent = orderNo; $("#mPrice").textContent = fmt(p.price);
+  $("#modal").classList.add("open"); document.body.style.overflow = "hidden"; $("#mGo").focus();
+}
+function closeModal(){ $("#modal").classList.remove("open"); document.body.style.overflow = ""; }
+products.addEventListener("click", e=>{
+  const b = e.target.closest(".order"); if(!b) return;
+  const p = PRODUCTS.find(x=>String(x.id)===b.dataset.id); if(p) openModal(p);
+});
+$("#mClose").onclick = closeModal; $("#overlay").onclick = closeModal;
+addEventListener("keydown", e=>{ if(e.key==="Escape") closeModal(); });
+$("#mGo").onclick = () => {
+  if(!current) return;
+  const msg = `مرحبًا THUNDER COLT ⚡\nأرغب بطلب اشتراك:\n\n• رقم الطلب: ${orderNo}\n• المنتج: ${current.name}\n• المدة: ${current.plan}\n• السعر: ${fmt(current.price)}\n\nأرجو تأكيد الطلب وإرسال طريقة الدفع.`;
+  window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${encodeURIComponent(msg)}`, "_blank", "noopener");
+};
+
+/* ظهور تدريجي */
+const io = new IntersectionObserver(es=>es.forEach(x=>{ if(x.isIntersecting){ x.target.classList.add("in"); io.unobserve(x.target); } }), {threshold:.15});
+document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+$("#yr").textContent = new Date().getFullYear();
+loadProducts();
+</script>
 </body>
 </html>
