@@ -38,7 +38,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font-family:'Tajawal',system
 /* Cards */
 .card-wrap{perspective:1000px;opacity:0;transform:translateY(30px) scale(.97);animation:cardIn .7s cubic-bezier(.2,.8,.2,1) forwards;animation-delay:calc(var(--i)*70ms)}
 @keyframes cardIn{to{opacity:1;transform:none}}
-.card{position:relative;height:100%;border-radius:24px;padding:22px;transform-style:preserve-3d;transition:transform .2s ease-out,box-shadow .35s;overflow:hidden;will-change:transform}
+.card{position:relative;height:100%;border-radius:24px;padding:22px;transform-style:preserve-3d;transition:transform .2s ease-out,box-shadow .35s;overflow:hidden;will-change:transform;display:flex;flex-direction:column;justify-content:space-between}
 .card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(280px circle at var(--mx,50%) var(--my,50%),rgba(0,229,255,.24),transparent 60%)}
 .card::after{content:"";position:absolute;inset:0;border-radius:inherit;padding:1.5px;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(220px circle at var(--mx,50%) var(--my,50%),var(--cyan),transparent 65%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
 .card:hover::before,.card:hover::after{opacity:1}
@@ -143,7 +143,11 @@ input:focus,button:focus-visible,.chip:focus-visible,a:focus-visible{outline:2px
   <div id="overlay" class="absolute inset-0 bg-black/70 backdrop-blur-sm"></div>
   <div class="panel glass relative w-full max-w-md rounded-3xl p-7 shadow-[0_0_80px_-10px_rgba(31,107,255,.7)]">
     <button id="mClose" aria-label="إغلاق" class="absolute top-4 left-4 w-9 h-9 rounded-full glass grid place-items-center hover:text-[var(--cyan)] hover:rotate-90 transition">✕</button>
-    <div class="flex items-center gap-4 mb-5"><div id="mPic" class="pic"></div><div><h3 id="mTitle" class="text-2xl font-extrabold"></h3><p id="mPlan" class="text-[var(--mut)]"></p></div></div>
+    <div class="flex items-center gap-4 mb-3"><div id="mPic" class="pic"></div><div><h3 id="mTitle" class="text-2xl font-extrabold"></h3><p id="mPlan" class="text-[var(--mut)]"></p></div></div>
+    
+    <!-- الوصف في النافذة المنبثقة -->
+    <p id="mDesc" class="text-sm text-[var(--mut)] leading-6 mb-4 glass p-3 rounded-xl border border-white/5"></p>
+    
     <ul id="mFeat" class="space-y-2 mb-5"></ul>
     <div class="flex items-center justify-between glass rounded-2xl px-4 py-3 mb-2"><span class="text-[var(--mut)]">رقم الطلب</span><b id="mOrder" class="logo text-[var(--cyan)] text-sm"></b></div>
     <div class="flex items-center justify-between glass rounded-2xl px-4 py-3 mb-5"><span class="text-[var(--mut)]">السعر</span><b id="mPrice" class="text-xl"></b></div>
@@ -203,6 +207,7 @@ function normalize(p){
     id: p.id, 
     name: p.name || "اشتراك", 
     plan: p.plan || "", 
+    description: p.descreption || p.description || "", // قراءة الوصف المكتوب في العمود
     price: Number(p.price) || 0, 
     category: p.category || "أخرى",
     color: safeColor(p.color), 
@@ -249,17 +254,24 @@ function renderChips(){
 }
 function renderGrid(){
   const q = query.trim().toLowerCase();
-  const list = PRODUCTS.filter(p => (activeCat==="الكل"||p.category===activeCat) && (!q || (p.name+" "+p.plan+" "+p.category).toLowerCase().includes(q)));
+  const list = PRODUCTS.filter(p => (activeCat==="الكل"||p.category===activeCat) && (!q || (p.name+" "+p.plan+" "+p.category+" "+p.description).toLowerCase().includes(q)));
   $("#nomatch").classList.toggle("hidden", list.length>0);
+  
   $("#products").innerHTML = list.map((p,i)=>`
    <div class="card-wrap" style="--i:${i}"><article class="card glass">
      <div class="glare"></div>
-     ${p.badge?`<span class="absolute top-4 left-4 text-xs font-extrabold px-3 py-1 rounded-full bg-[var(--cyan)] text-black lift">${esc(p.badge)}</span>`:""}
-     <div class="lift pic" style="background:linear-gradient(135deg,${p.color},${p.color}88);box-shadow:0 0 30px ${p.color}77">${picHTML(p)}</div>
-     <h3 class="lift2 mt-4 text-xl font-extrabold">${esc(p.name)}</h3>
-     <p class="lift2 text-[var(--mut)] text-sm">${esc(p.plan)}</p>
-     <ul class="lift2 mt-3 mb-5 text-sm text-[var(--mut)] space-y-1">${p.features.slice(0,3).map(f=>`<li><span class="text-[var(--cyan)]">✓</span> ${esc(f)}</li>`).join("")}</ul>
-     <div class="lift flex items-center justify-between"><b class="text-2xl">${esc(fmt(p.price))}</b><button class="btn mag order" data-id="${esc(p.id)}">اطلب الآن</button></div>
+     <div>
+       ${p.badge?`<span class="absolute top-4 left-4 text-xs font-extrabold px-3 py-1 rounded-full bg-[var(--cyan)] text-black lift">${esc(p.badge)}</span>`:""}
+       <div class="lift pic" style="background:linear-gradient(135deg,${p.color},${p.color}88);box-shadow:0 0 30px ${p.color}77">${picHTML(p)}</div>
+       <h3 class="lift2 mt-4 text-xl font-extrabold">${esc(p.name)}</h3>
+       <p class="lift2 text-[var(--mut)] text-sm font-semibold">${esc(p.plan)}</p>
+
+       <!-- إضافة عرض الوصف المباشر في الكارت -->
+       ${p.description ? `<p class="lift2 mt-2 text-sm text-[var(--ink)] opacity-85 leading-6 line-clamp-2">${esc(p.description)}</p>` : ''}
+
+       <ul class="lift2 mt-3 mb-5 text-sm text-[var(--mut)] space-y-1">${p.features.slice(0,3).map(f=>`<li><span class="text-[var(--cyan)]">✓</span> ${esc(f)}</li>`).join("")}</ul>
+     </div>
+     <div class="lift flex items-center justify-between mt-4"><b class="text-2xl">${esc(fmt(p.price))}</b><button class="btn mag order" data-id="${esc(p.id)}">اطلب الآن</button></div>
    </article></div>`).join("");
 }
 
@@ -305,6 +317,16 @@ const makeOrder = () => "TC-" + Date.now().toString(36).toUpperCase().slice(-5) 
 function openModal(p){
   current = p; orderNo = makeOrder();
   $("#mTitle").textContent = p.name; $("#mPlan").textContent = p.plan;
+  
+  // إظهار الوصف في النافذة المنبثقة
+  const descEl = $("#mDesc");
+  if(p.description) {
+    descEl.textContent = p.description;
+    descEl.style.display = "block";
+  } else {
+    descEl.style.display = "none";
+  }
+
   const pic = $("#mPic"); pic.style.cssText = `background:linear-gradient(135deg,${p.color},${p.color}88);box-shadow:0 0 30px ${p.color}77`; pic.innerHTML = picHTML(p);
   $("#mFeat").innerHTML = p.features.map(f=>`<li><span class="text-[var(--cyan)]">✓</span> ${esc(f)}</li>`).join("");
   $("#mOrder").textContent = orderNo; $("#mPrice").textContent = fmt(p.price);
